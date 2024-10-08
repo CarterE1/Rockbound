@@ -1,12 +1,12 @@
-using System.CodeDom.Compiler;
 using TMPro;
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
+    private SpriteRenderer playerSprite;
 
     private Vector2 throwVector;
     private bool throwing; // is the player throwing
@@ -41,13 +41,16 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+        playerSprite = GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
     {
         var horizontalMovement = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(horizontalMovement, 0, 0) * horizontalSpeed; // Move player based on input
-        boxCollider.sharedMaterial.friction = isGrounded() && Mathf.Abs(horizontalMovement) > 0f ? 0f : 50f; // Set friction if player is moving/grounded
+        if (isGrounded()) {
+            transform.position += new Vector3(horizontalMovement, 0, 0) * horizontalSpeed; // Move player based on input
+        }
+        boxCollider.sharedMaterial.friction = isGrounded() && Mathf.Abs(horizontalMovement) > 0f ? 0f : 5f; // Set friction if player is moving/grounded
     }
 
     void Update()
@@ -60,7 +63,7 @@ public class PlayerMovement : MonoBehaviour
         throwDebounce -= throwDebounce <= 0f ? 0f : Time.deltaTime;
         canThrow = throwDebounce <= 0f;
 
-        if (Input.GetMouseButton(0) && canThrow && rockCount > 0)
+        if (Input.GetMouseButton(0) && canThrow && (rockCount > 0 || rockCount < 0))
         {
             throwing = true;
             throwForce += Time.deltaTime * throwForceMultiplier * 100f;
@@ -68,6 +71,18 @@ public class PlayerMovement : MonoBehaviour
         else if (throwing)
         {
             throwRock(throwForce <= maxThrowForce / 5f ? initalForce : throwForce);
+        }
+
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if (mousePos.x > transform.position.x)
+        {
+            transform.localScale = new Vector3(-0.9f, 0.9f, 0.9f);
+            boxXOffset = 0.04f;
+        }
+        else if (mousePos.x < transform.position.x)
+        {
+            transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+            boxXOffset = -0.04f;
         }
     }
 
