@@ -6,6 +6,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private Rigidbody2D rb;
+    private BoxCollider2D boxCollider;
 
     private Vector2 throwVector;
     private bool throwing; // is the player throwing
@@ -39,12 +40,14 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
     }
 
     void FixedUpdate()
     {
-        transform.position += isGrounded() ? new Vector3(Input.GetAxis("Horizontal"), 0, 0) * horizontalSpeed : Vector3.zero;
-        //rb.velocity = Vector2.ClampMagnitude(rb.velocity, maxVelocity);
+        var horizontalMovement = Input.GetAxis("Horizontal");
+        transform.position += new Vector3(horizontalMovement, 0, 0) * horizontalSpeed; // Move player based on input
+        boxCollider.sharedMaterial.friction = isGrounded() && Mathf.Abs(horizontalMovement) > 0f ? 0f : 50f; // Set friction if player is moving/grounded
     }
 
     void Update()
