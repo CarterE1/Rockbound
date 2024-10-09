@@ -50,7 +50,7 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded()) {
             transform.position += new Vector3(horizontalMovement, 0, 0) * horizontalSpeed; // Move player based on input
         }
-        boxCollider.sharedMaterial.friction = isGrounded() && Mathf.Abs(horizontalMovement) > 0f ? 0f : 5f; // Set friction if player is moving/grounded
+        //boxCollider.sharedMaterial.friction = isGrounded() && Mathf.Abs(horizontalMovement) > 0f ? 0f : 5f; // Set friction if player is moving/grounded
     }
 
     void Update()
