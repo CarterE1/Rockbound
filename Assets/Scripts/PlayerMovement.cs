@@ -116,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
 
             Vector2 dragVelocity = findThrowVector(throwForce) * 0.1f;
 
-            Vector2[] trajectory = PlotTrajectory(rb, (Vector2)transform.position, dragVelocity, Mathf.Clamp((int)(throwForce / 25f), 0, 40));
+            Vector2[] trajectory = PlotTrajectory(rb, (Vector2)transform.position, dragVelocity, Mathf.Clamp((int)(throwForce / 15f), 0, 70));
             lineRenderer.positionCount = trajectory.Length;
 
             Vector3[] positions = new Vector3[trajectory.Length];
