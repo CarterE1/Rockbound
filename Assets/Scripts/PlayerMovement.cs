@@ -96,12 +96,12 @@ public class PlayerMovement : MonoBehaviour
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if (mousePos.x > transform.position.x)
         {
-            transform.localScale = new Vector3(-0.9f, 0.9f, 0.9f);
+            transform.localScale = new Vector3(-1f, 1f, 1f);
             boxXOffset = 0.04f;
         }
         else if (mousePos.x < transform.position.x)
         {
-            transform.localScale = new Vector3(0.9f, 0.9f, 0.9f);
+            transform.localScale = new Vector3(1f, 1f, 1f);
             boxXOffset = -0.04f;
         }
 
@@ -116,7 +116,7 @@ public class PlayerMovement : MonoBehaviour
 
             Vector2 dragVelocity = findThrowVector(throwForce) * 0.1f;
 
-            Vector2[] trajectory = PlotTrajectory(rb, (Vector2)transform.position, dragVelocity, Mathf.Clamp((int)(throwForce / 15f), 0, 70));
+            Vector2[] trajectory = PlotTrajectory(rb, (Vector2)transform.position, dragVelocity, Mathf.Clamp((int)(throwForce / 15f), 0, 55));
             lineRenderer.positionCount = trajectory.Length;
 
             Vector3[] positions = new Vector3[trajectory.Length];
@@ -142,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
         Vector2[] results = new Vector2[steps];
 
         float timeStep = Time.fixedDeltaTime / Physics2D.velocityIterations;
-        Vector2 gravityAccel = Physics2D.gravity * rigidbody.gravityScale * timeStep * timeStep * 40f;
+        Vector2 gravityAccel = Physics2D.gravity * rigidbody.gravityScale * timeStep * timeStep * 45f;
 
         float drag = 1f - timeStep * rigidbody.drag;
         Vector2 moveStep = velocity * timeStep;
